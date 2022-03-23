@@ -66,7 +66,7 @@ def execute(update: Update, contect:CallbackContext) -> None:
     user = update.message.from_user
     if user.id == admin_id:
         try:
-            p = subprocess.run(update.message.text.split(" "), shell=True, capture_output=True)
+            p = subprocess.run(update.message.text.split(" "), shell=True, capture_output=True, timeout=5)
             out=p.stdout
             if int(len(out)) < 4090:
                 update.message.reply_text(out.decode("latin-1"))
@@ -74,6 +74,8 @@ def execute(update: Update, contect:CallbackContext) -> None:
                 for element in list(chunkstring(out,4090)):
                     print(element)
                     update.message.reply_text(element.decode("latin-1"))
+        except subprocess.TimeoutExpired as err:
+            update.message.reply_text("Timeout", parse_mode="html")
         except Exception as e:
             print(e)
             update.message.reply_text("<b>Command error.</b>", parse_mode="html")
