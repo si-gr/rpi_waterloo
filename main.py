@@ -41,7 +41,10 @@ def toggle(bot, context):
         if(len(context.args) == 0):
             return
         GPIO.output(pump_array[int(context.args[0])], GPIO.LOW)
-        time.sleep(2)
+        if(len(context.args) == 2):
+            time.sleep(int(context.args[1]))
+        else:
+            time.sleep(5)
         GPIO.output(pump_array[int(context.args[0])], GPIO.HIGH)
         bot.message.reply_markdown_v2(
             "Pump run: " + str(pump_array[int(context.args[0])]))
