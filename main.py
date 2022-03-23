@@ -52,7 +52,7 @@ def reload(bot, context):
     process = subprocess.Popen("git pull".split(), cwd="/home/pi/workspace/rpi_waterloo", stdout=subprocess.PIPE)
     time.sleep(20)
     output, _ = process.communicate()
-    bot.message.reply_markdown_v2(str(output).replace(".", "\."))
+    bot.message.reply_text(str(output))
 
 
 def osinfo(update: Update, context: CallbackContext) -> None:
