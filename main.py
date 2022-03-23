@@ -22,12 +22,11 @@ admin_id = 195707881
 
 GPIO.setmode(GPIO.BOARD)
 
-GPIO.setup(16, GPIO.OUT)
-GPIO.setup(18, GPIO.OUT)
-GPIO.setup(19, GPIO.OUT)
-GPIO.setup(21, GPIO.OUT)
-
 pump_array = [16, 18, 19, 21]
+
+for p in pump_array:
+    GPIO.setup(p, GPIO.OUT)
+    GPIO.output(p, GPIO.HIGH)
 
 updater = Updater(token=open("/home/pi/workspace/token", "r").read().splitlines()[0])
 dispatcher = updater.dispatcher
@@ -41,9 +40,9 @@ def toggle(bot, context):
     if bot.effective_user.id == admin_id:
         if(len(context.args) == 0):
             return
-        GPIO.output(pump_array[int(context.args[0])], GPIO.HIGH)
-        time.sleep(2)
         GPIO.output(pump_array[int(context.args[0])], GPIO.LOW)
+        time.sleep(2)
+        GPIO.output(pump_array[int(context.args[0])], GPIO.HIGH)
         bot.message.reply_markdown_v2(
             "Pump run: " + str(pump_array[int(context.args[0])]))
 
