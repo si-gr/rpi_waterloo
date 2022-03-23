@@ -18,10 +18,7 @@ GPIO.setup(21, GPIO.OUT)
 
 pump_array = [16, 18, 19, 21]
 
-
-
-
-updater = Updater(token='461718350:AAEwA95TSfk698kPsc26DcQL1hkveRdS33I')
+updater = Updater(token=open("../token", "r").read())
 dispatcher = updater.dispatcher
 bot_obj = updater.bot
 
