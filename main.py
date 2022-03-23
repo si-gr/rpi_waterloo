@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import subprocess
 
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
@@ -36,8 +37,17 @@ def toggle(bot, context):
         bot.message.reply_markdown_v2(
             "Pump run: " + str(pump_array[int(context.args[0])]))
 
+# git pull
+def reload(bot, context):
+    process = subprocess.Popen("git pull", cwd="/home/pi/workspace/rpi_waterloo", stdout=subprocess.PIPE)
+    time.sleep(20)
+    output, _ = process.communicate()
+    bot.message.reply_markdown_v2(output)
+
 start_handler = CommandHandler('start', start)
 show_handler = CommandHandler('toggle', toggle)
+reload_handler = CommandHandler('reload', reload)
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(show_handler)
+dispatcher.add_handler(reload_handler)
 updater.start_polling()
