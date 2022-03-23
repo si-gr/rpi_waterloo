@@ -39,10 +39,10 @@ def toggle(bot, context):
 
 # git pull
 def reload(bot, context):
-    process = subprocess.Popen("git pull", cwd="/home/pi/workspace/rpi_waterloo", stdout=subprocess.PIPE)
+    process = subprocess.Popen("git pull".split(), cwd="/home/pi/workspace/rpi_waterloo", stdout=subprocess.PIPE)
     time.sleep(20)
     output, _ = process.communicate()
-    bot.message.reply_markdown_v2(output)
+    bot.message.reply_markdown_v2(str(output).replace(".", "\."))
 
 start_handler = CommandHandler('start', start)
 show_handler = CommandHandler('toggle', toggle)
