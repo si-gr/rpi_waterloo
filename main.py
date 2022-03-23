@@ -18,22 +18,23 @@ GPIO.setup(21, GPIO.OUT)
 
 pump_array = [16, 18, 19, 21]
 
-updater = Updater(token=open("../token", "r").read())
+updater = Updater(token=open("../token", "r").read().splitlines()[0])
 dispatcher = updater.dispatcher
 bot_obj = updater.bot
 
 
 def start(bot, context):
-    print(context.effective_user.id)
+    print(bot.effective_user.id)
 
 def toggle(bot, context):
-    if(len(context.args) == 0):
-        return
-    GPIO.output(pump_array[context.args[0]], GPIO.HIGH)
-    time.sleep(2)
-    GPIO.output(pump_array[context.args[0]], GPIO.LOW)
-    bot.message.reply_markdown_v2(
-        "Pump run: " + str(pump_array[context.args[0]]))
+    if bot.effective_user.id == admin_id:
+        if(len(context.args) == 0):
+            return
+        GPIO.output(pump_array[int(context.args[0])], GPIO.HIGH)
+        time.sleep(2)
+        GPIO.output(pump_array[int(context.args[0])], GPIO.LOW)
+        bot.message.reply_markdown_v2(
+            "Pump run: " + str(pump_array[int(context.args[0])]))
 
 start_handler = CommandHandler('start', start)
 show_handler = CommandHandler('toggle', toggle)
