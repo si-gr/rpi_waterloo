@@ -63,7 +63,7 @@ def osinfo(update: Update, context: CallbackContext) -> None:
 def chunkstring(string,length):
     return (string[0 + i:length + i] for i in range(0, len(string), length))
 
-def execute(update: Update, contect:CallbackContext) -> None:
+def execute(update: Update, context:CallbackContext) -> None:
     print(update.message.text.split(" "))
     user = update.message.from_user
     if user.id == admin_id:
