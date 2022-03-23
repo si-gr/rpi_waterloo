@@ -6,9 +6,6 @@ from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler
 from telegram.ext import Filters
 
-from requests import get
-import tableParser
-
 
 admin_id = 195707881
 
