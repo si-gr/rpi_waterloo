@@ -80,7 +80,7 @@ def execute(update: Update, context:CallbackContext) -> None:
             update.message.reply_text("Timeout", parse_mode="html")
         except Exception as e:
             print(e)
-            update.message.reply_text("<b>Command error.</b>", parse_mode="html")
+            update.message.reply_text(f"<b>Command error.</b> {e}", parse_mode="html")
     else:
         update.message.reply_text("<b>Command error.</b>", parse_mode="html")
 
