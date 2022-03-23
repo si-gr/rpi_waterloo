@@ -64,7 +64,6 @@ def chunkstring(string,length):
 def execute(update: Update, contect:CallbackContext) -> None:
     print(update.message.text.split(" "))
     user = update.message.from_user
-    print(user.id)
     if user.id == admin_id:
         try:
             p = subprocess.run(update.message.text.split(" "), shell=True, capture_output=True)
@@ -73,6 +72,7 @@ def execute(update: Update, contect:CallbackContext) -> None:
                 update.message.reply_text(out.decode("latin-1"))
             else:
                 for element in list(chunkstring(out,4090)):
+                    print(element)
                     update.message.reply_text(element.decode("latin-1"))
         except Exception as e:
             print(e)
