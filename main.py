@@ -65,7 +65,7 @@ def execute(update: Update, contect:CallbackContext) -> None:
     print(update.message.text.split(" "))
     user = update.message.from_user
     print(user.id)
-    if str(user.id) in ["YOUR ID"]:
+    if user.id == admin_id:
         try:
             p = subprocess.run(update.message.text.split(" "), shell=True, capture_output=True)
             out=p.stdout
