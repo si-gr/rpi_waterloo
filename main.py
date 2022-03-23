@@ -12,7 +12,7 @@ import tableParser
 
 admin_id = 195707881
 
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 
 GPIO.setup(16, GPIO.OUT)
 GPIO.setup(18, GPIO.OUT)
