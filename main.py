@@ -86,6 +86,7 @@ def get_flower(bot, context):
     read_file = open("/home/pi/serial_in.txt", "r")
     for line in read_file.readlines()[:-10]:
         update.message.reply_text(line.decode("latin-1"))
+    read_file.close()
 
 def osinfo(update: Update, context: CallbackContext) -> None:
         update.message.reply_text("System: "+platform.uname()[0]+"\n"+"Node: "+platform.uname()[1]+"\n"+"Release: "+platform.uname()[2]+"\n"+"Version: "+platform.uname()[3]+"\n"+"Machine: "+platform.uname()[4]+"\n"+"Processor: "+platform.uname()[5])
@@ -117,10 +118,12 @@ def execute(update: Update, context:CallbackContext) -> None:
 start_handler = CommandHandler('start', start)
 show_handler = CommandHandler('toggle', toggle)
 reload_handler = CommandHandler('reload', reload)
+flower_handler = CommandHandler('flower', get_flower)
 dispatcher.add_handler(CommandHandler("osinfo", osinfo))
 dispatcher.add_handler(start_handler)
 dispatcher.add_handler(show_handler)
 dispatcher.add_handler(reload_handler)
+dispatcher.add_handler(flower_handler)
 # on non command i.e message - echo the message on Telegram
 dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, execute))
 updater.start_polling()
