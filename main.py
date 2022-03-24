@@ -47,14 +47,15 @@ def read_from_port():
     serial_file = open("/home/pi/serial_in.txt", "a")
     while True:
         try:
-            line = ser.readline().decode()
+            line = ser.read(1024).decode()
             if len(line) > 2:
                 print(line)
                 logger.info(line)
             if "Real" in line:
-                serial_file.write(line)
+                serial_file.write(line, buffering=0)
+                logger.info("Writing " + line)
                 for i in range(0, 4):
-                    serial_file.write(ser.readline().decode())
+                    serial_file.write(ser.read(1024).decode(), buffering=0)
         except Exception as e:
             print(e)
 
