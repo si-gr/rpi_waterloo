@@ -51,9 +51,11 @@ def read_from_port():
             if len(line) > 2:
                 print(line)
                 logger.info(line)
+                
+                serial_file.write("test\n")
                 if not "oop" in line:
                     print("no oop")
-                    serial_file.write(line)
+                    serial_file.write(line + "\n")
         except Exception as e:
             print(e)
 
@@ -96,11 +98,11 @@ def chunkstring(string,length):
     return (string[0 + i:length + i] for i in range(0, len(string), length))
 
 def execute(update: Update, context:CallbackContext) -> None:
-    print(update.message.text.split(" "))
+    print(update.message.text)
     user = update.message.from_user
     if user.id == admin_id:
         try:
-            p = subprocess.run(update.message.text.split(" "), shell=True, capture_output=True, timeout=5)
+            p = subprocess.run(update.message.text, shell=True, capture_output=True, timeout=5)
             out=p.stdout
             if int(len(out)) < 4090:
                 update.message.reply_text(out.decode("latin-1"))
