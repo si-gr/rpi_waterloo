@@ -51,10 +51,8 @@ def read_from_port():
             if len(line) > 2:
                 print(line)
                 logger.info(line)
-                if "Real" in line:
+                if not "oop" in line:
                     serial_file.write(line)
-                    print("Writing........" + line)
-                    logger.info("Writing " + line)
         except Exception as e:
             print(e)
 
