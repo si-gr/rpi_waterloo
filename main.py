@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import subprocess
 import logging
+import threading
 
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
@@ -10,6 +11,16 @@ from telegram.ext import Filters
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 import platform
+import serial
+
+ser = serial.Serial(
+        port='/dev/ttyAM0',
+        baudrate = 9600,
+        parity=serial.PARITY_NONE,
+        stopbits=serial.STOPBITS_ONE,
+        bytesize=serial.EIGHTBITS,
+        timeout=1
+)
 
 # Enable logging
 logging.basicConfig(
@@ -32,6 +43,18 @@ updater = Updater(token=open("/home/pi/workspace/token", "r").read().splitlines(
 dispatcher = updater.dispatcher
 bot_obj = updater.bot
 
+def read_from_port():
+    serial_file = open("/home/pi/serial_in.txt", "a")
+    while True:
+        line = ser.readline().decode()
+        print(line)
+        if "Real" in line:
+            serial_file.write(line)
+            for i in range(0, 4):
+                serial_file.write(ser.readline().decode())
+
+thread = threading.Thread(target=read_from_port)
+thread.start()
 
 def start(bot, context):
     print(bot.effective_user.id)
@@ -56,6 +79,10 @@ def reload(bot, context):
     output, _ = process.communicate()
     bot.message.reply_text(str(output))
 
+def get_flower(bot, context):
+    read_file = open("/home/pi/serial_in.txt", "r")
+    for line in read_file.readlines()[:-10]:
+        update.message.reply_text(line.decode("latin-1"))
 
 def osinfo(update: Update, context: CallbackContext) -> None:
         update.message.reply_text("System: "+platform.uname()[0]+"\n"+"Node: "+platform.uname()[1]+"\n"+"Release: "+platform.uname()[2]+"\n"+"Version: "+platform.uname()[3]+"\n"+"Machine: "+platform.uname()[4]+"\n"+"Processor: "+platform.uname()[5])
