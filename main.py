@@ -50,7 +50,7 @@ bot_obj = updater.bot
 def read_from_port():
     while True:
         try:
-            line = str(ser.read(1024).decode()).replace("\n", " ")
+            line = str(ser.read(1024).decode('utf8', errors='ignore')).replace("\n", " ")
             if len(line) > 2:
                 print(line)
                 logger.info(line)
