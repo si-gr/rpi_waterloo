@@ -90,7 +90,11 @@ def get_flower(bot, context):
     lines = read_file.readlines()
     for line in range(0, len(lines)):
         if "Real " in lines[line]:
-            res += [lines[line - 5][:19] + " " + lines[line][13:]]
+            r = ""
+            for l2 in lines[line - 8:line]:
+                if "2022" in l2:
+                    r += l2
+            res += [r[:19] + " " + lines[line][13:]]
     bot.message.reply_text(res[-1])
     read_file.close()
 
