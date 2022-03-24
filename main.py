@@ -23,7 +23,7 @@ ser = serial.Serial(
 )
 
 # Enable logging
-logging.basicConfig(
+logging.basicConfig(filename='python.log',
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
 
@@ -48,6 +48,7 @@ def read_from_port():
     while True:
         try:
             line = ser.readline().decode()
+            logging.debug(line)
             if len(line) > 2:
                 print(line)
             if "Real" in line:
