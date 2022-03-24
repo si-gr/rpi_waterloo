@@ -51,7 +51,7 @@ def read_from_port():
             if len(line) > 2:
                 print(line)
                 logger.info(line)
-                if line[0] == "T":
+                if "Real" in line:
                     serial_file.write(line)
                     print("Writing........")
                     logger.info("Writing " + line)
