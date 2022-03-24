@@ -12,6 +12,7 @@ from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 import platform
 import serial
+import os
 
 ser = serial.Serial(
         port='/dev/ttyAMA0',
@@ -21,6 +22,9 @@ ser = serial.Serial(
         bytesize=serial.EIGHTBITS,
         timeout=1
 )
+
+if os.path.getsize("python.log") > 200000:
+    os.remove("python.log")
 
 # Enable logging
 logging.basicConfig(filename='python.log',
@@ -44,18 +48,12 @@ dispatcher = updater.dispatcher
 bot_obj = updater.bot
 
 def read_from_port():
-    serial_file = open("/home/pi/serial_in.txt", "a")
     while True:
         try:
             line = str(ser.read(1024).decode()).replace("\n", " ")
             if len(line) > 2:
                 print(line)
                 logger.info(line)
-                
-                serial_file.write("test\n")
-                if not "oop" in line:
-                    print("no oop")
-                    serial_file.write(line + "\n")
         except Exception as e:
             print(e)
 
@@ -86,9 +84,10 @@ def reload(bot, context):
     bot.message.reply_text(str(output))
 
 def get_flower(bot, context):
-    read_file = open("/home/pi/serial_in.txt", "r")
-    for line in read_file.readlines()[:-10]:
-        update.message.reply_text(line.decode("latin-1"))
+    read_file = open("/home/pi/workspace/rpi_waterloo/python.log", "r")
+    for line in read_file.readlines()[:-20]:
+        if "Real" in line:
+            update.message.reply_text(line.decode("latin-1"))
     read_file.close()
 
 def osinfo(update: Update, context: CallbackContext) -> None:
