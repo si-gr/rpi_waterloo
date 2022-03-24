@@ -51,11 +51,11 @@ def read_from_port():
             if len(line) > 2:
                 print(line)
                 logger.info(line)
-            if line[0] == "T":
-                serial_file.write(line)
-                logger.info("Writing " + line)
-                for i in range(0, 4):
-                    serial_file.write(ser.read(1024).decode())
+                if line[0] == "T":
+                    serial_file.write(line)
+                    logger.info("Writing " + line)
+                    for i in range(0, 4):
+                        serial_file.write(ser.read(1024).decode())
         except Exception as e:
             print(e)
 
