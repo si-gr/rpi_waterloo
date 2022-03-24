@@ -53,6 +53,7 @@ def read_from_port():
                 logger.info(line)
                 if line[0] == "T":
                     serial_file.write(line)
+                    print("Writing........")
                     logger.info("Writing " + line)
                     for i in range(0, 4):
                         serial_file.write(ser.read(1024).decode())
