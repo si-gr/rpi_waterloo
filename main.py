@@ -87,9 +87,10 @@ def get_flower(bot, context):
     read_file = open("/home/pi/workspace/rpi_waterloo/python.log", "r")
     print("flower command")
     res = []
-    for line in read_file.readlines():
-        if "Real" in line:
-            res += [line]
+    lines = read_file.readlines()
+    for line in range(0, len(lines)):
+        if "Real " in lines[line]:
+            res += [lines[line - 5][:19] + " " + lines[line][13:]]
     bot.message.reply_text(res[-1])
     read_file.close()
 
