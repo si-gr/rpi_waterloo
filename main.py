@@ -48,9 +48,9 @@ def read_from_port():
     while True:
         try:
             line = ser.readline().decode()
-            logger.info(line)
             if len(line) > 2:
                 print(line)
+                logger.info(line)
             if "Real" in line:
                 serial_file.write(line)
                 for i in range(0, 4):
