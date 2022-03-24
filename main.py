@@ -15,7 +15,7 @@ import serial
 
 ser = serial.Serial(
         port='/dev/ttyAMA0',
-        baudrate = 9600,
+        baudrate = 115200,
         parity=serial.PARITY_NONE,
         stopbits=serial.STOPBITS_ONE,
         bytesize=serial.EIGHTBITS,
@@ -46,12 +46,15 @@ bot_obj = updater.bot
 def read_from_port():
     serial_file = open("/home/pi/serial_in.txt", "a")
     while True:
-        line = ser.readline().decode()
-        print(line)
-        if "Real" in line:
-            serial_file.write(line)
-            for i in range(0, 4):
-                serial_file.write(ser.readline().decode())
+        try:
+            line = ser.readline()
+            print(line)
+            if "Real" in line:
+                serial_file.write(line)
+                for i in range(0, 4):
+                    serial_file.write(ser.readline())
+        except Exception as e:
+            print(e)
 
 thread = threading.Thread(target=read_from_port)
 thread.start()
