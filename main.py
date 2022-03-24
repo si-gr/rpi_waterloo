@@ -48,7 +48,7 @@ def read_from_port():
     while True:
         try:
             line = ser.readline().decode()
-            logging.debug(line)
+            logger.info(line)
             if len(line) > 2:
                 print(line)
             if "Real" in line:
