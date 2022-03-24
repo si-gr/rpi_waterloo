@@ -52,6 +52,7 @@ def read_from_port():
                 print(line)
                 logger.info(line)
                 if not "oop" in line:
+                    print("no oop")
                     serial_file.write(line)
         except Exception as e:
             print(e)
