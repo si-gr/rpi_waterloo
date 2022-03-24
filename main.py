@@ -47,7 +47,7 @@ def read_from_port():
     serial_file = open("/home/pi/serial_in.txt", "a")
     while True:
         try:
-            line = ser.read(1024).decode()
+            line = str(ser.read(1024).decode()).replace("\n", " ")
             if len(line) > 2:
                 print(line)
                 logger.info(line)
