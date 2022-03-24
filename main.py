@@ -86,10 +86,11 @@ def reload(bot, context):
 def get_flower(bot, context):
     read_file = open("/home/pi/workspace/rpi_waterloo/python.log", "r")
     print("flower command")
-    for line in read_file.readlines()[:-20]:
-        print(line)
+    res = []
+    for line in read_file.readlines():
         if "Real" in line:
-            update.message.reply_text(line.decode("latin-1"))
+            res += [line]
+    bot.message.reply_text(res[-1])
     read_file.close()
 
 def osinfo(update: Update, context: CallbackContext) -> None:
