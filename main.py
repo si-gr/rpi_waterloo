@@ -27,7 +27,7 @@ if os.path.getsize("python.log") > 200000:
     os.remove("python.log")
 
 # Enable logging
-logging.basicConfig(filename='python.log',
+logging.basicConfig(filename='/home/pi/workspace/rpi_waterloo/python.log',
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
 
