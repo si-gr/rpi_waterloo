@@ -4,6 +4,7 @@ import subprocess
 import logging
 import threading
 
+from influxdb import InfluxDBClient
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from telegram.ext import MessageHandler
@@ -25,6 +26,8 @@ ser = serial.Serial(
 
 if os.path.getsize("python.log") > 200000:
     os.remove("python.log")
+
+client = InfluxDBClient(host='127.0.0.1', port=8086, database='flower')
 
 # Enable logging
 logging.basicConfig(filename='/home/pi/workspace/rpi_waterloo/python.log',
@@ -54,6 +57,27 @@ def read_from_port():
             if len(line) > 2:
                 print(line)
                 logger.info(line)
+            
+                if "Temperature" in line:
+                    splitted = line(" ")
+                    if len(splitted) > 15:
+                        if "Temperature" in splitted[4]:
+                            temp = splitted[5]
+                            brightness = splitted[8]
+                            moisture = splitted[12]
+                            cond = splitted[15]
+                            client.write({"tags": {},
+                                            "points": [{
+                                                "measurement": "flower",
+                                                "fields": 
+                                                    {"temperature": temp, 
+                                                    "brightness": brightness,
+                                                    "moisture": moisture,
+                                                    "conductivity": cond
+                                                    }
+                                                }
+                                            ]},{'db':'flower'},204, u'json')
+
         except Exception as e:
             print(e)
 
