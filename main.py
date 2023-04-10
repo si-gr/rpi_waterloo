@@ -1,3 +1,7 @@
+# 
+# 30 * * * * pi /home/pi/workspace/rpi_waterloo/startscript.sh &
+# 
+
 import RPi.GPIO as GPIO
 import time
 import subprocess
