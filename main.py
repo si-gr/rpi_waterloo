@@ -53,30 +53,35 @@ bot_obj = updater.bot
 def read_from_port():
     while True:
         try:
-            line = str(ser.read(1024).decode('utf8', errors='ignore')).replace("\n", " ")
-            if len(line) > 2:
-                print(line)
-                logger.info(line)
-            
-                if "Temperature" in line:
-                    splitted = line(" ")
-                    if len(splitted) > 15:
-                        if "Temperature" in splitted[4]:
-                            temp = splitted[5]
-                            brightness = splitted[8]
-                            moisture = splitted[12]
-                            cond = splitted[15]
-                            client.write({"tags": {},
-                                            "points": [{
-                                                "measurement": "flower",
-                                                "fields": 
-                                                    {"temperature": temp, 
-                                                    "brightness": brightness,
-                                                    "moisture": moisture,
-                                                    "conductivity": cond
-                                                    }
+            current_read = str(ser.read(1024).decode('utf8', errors='ignore')).replace("\n", " ")
+            if len(current_read) > 2:
+                print(current_read)
+                logger.info(current_read)
+                if "Temp" in current_read:
+                    
+                    print("temp read")
+                    logger.info("temp read")
+                    t_split = current_read.split("Temperature")[1]
+                    splitted = t_split.split(" ")
+                    print(splitted)
+                    if len(splitted) > 10:
+                        temp = splitted[1]
+                        brightness = splitted[4]
+                        moisture = splitted[8]
+                        cond = splitted[11]                                        
+                        print("influx")
+                        logger.info("influx")
+                        client.write({"tags": {},
+                                        "points": [{
+                                            "measurement": "flower",
+                                            "fields": 
+                                                {"temperature": temp, 
+                                                "brightness": brightness,
+                                                "moisture": moisture,
+                                                "conductivity": cond
                                                 }
-                                            ]},{'db':'flower'},204, u'json')
+                                            }
+                                        ]},{'db':'flower'},204, u'json')
 
         except Exception as e:
             print(e)
@@ -119,7 +124,10 @@ def get_flower(bot, context):
                 if "2022" in l2:
                     r += l2
             res += [r[:19] + " " + lines[line][13:]]
-    bot.message.reply_text(res[-1])
+    if(len(res) > 0):
+    	bot.message.reply_text(res[-1])
+    else:
+    	bot.message.reply_text("nothing")
     read_file.close()
 
 def osinfo(update: Update, context: CallbackContext) -> None:
